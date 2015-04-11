@@ -11,6 +11,7 @@ public class TheDude : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		//this.rigidbody.MovePosition (transform.position + transform.forward * Time.deltaTime);
 		float vertical = Input.GetAxis ("Vertical");
 		float horizontal = Input.GetAxis ("Horizontal");
 		animateTheDude.SetFloat("speed", vertical );

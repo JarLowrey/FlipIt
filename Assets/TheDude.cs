@@ -75,13 +75,13 @@ public class TheDude : MonoBehaviour {
 			
 			Vector3 rot = this.transform.rotation.eulerAngles; 
 			//check if character is done rotating
-			if(Mathf.Abs(rot.z)<1){//rightside up
+			if(Mathf.Abs(rot.z) < Mathf.Abs(rotationRate)){//rightside up
 				//smooth rotation
 				rot = new Vector3(rot.x,rot.y,0);
 				this.transform.rotation = Quaternion.Euler(rot);
 				//signal rotation has ended
 				characterRotating = false;
-			}else if( Mathf.Abs(rot.z-180)<1){//upside down
+			}else if( Mathf.Abs(rot.z-180) < Mathf.Abs(rotationRate) ){//upside down
 				//smooth rotation
 				rot = new Vector3(rot.x,rot.y,180);
 				this.transform.rotation = Quaternion.Euler(rot);

@@ -6,11 +6,15 @@ public class TheDude : MonoBehaviour {
 	Animator animateTheDude;
 	bool characterRotating;
 	float rotationRate = 2f;
+	float roofHeight;
+	float groundHeight;
 
 	// Use this for initialization
 	void Start () {
 		animateTheDude = GetComponent<Animator> ();
 		characterRotating = false;
+		roofHeight = GameObject.Find ("Roof").transform.position.y; //roof height
+		groundHeight = 0; 
 	}
 	
 	// Update is called once per frame
@@ -34,7 +38,7 @@ public class TheDude : MonoBehaviour {
 		}
 
 		//Gravity controller
-		if( !characterRotating && Input.GetKeyDown(KeyCode.G) ) //cannot rotate while in air - how to check that?
+		if( isOnPlane () && Input.GetKeyDown(KeyCode.G) ) //cannot rotate while in air, only near planes
 		{
 			//set speed of rotation based on how far away wall is (if possible)
 			characterRotating = true;
@@ -89,5 +93,17 @@ public class TheDude : MonoBehaviour {
 				characterRotating = false;
 			}
 		}
+	}
+
+	//helper funciton to check and see if player is closeEnough to a plane (roof or floor)
+	//in future iterations, this can include moving platforms and other areas that will be acceptable for rotation
+	//true if close enough, false o.w
+	private bool isOnPlane(){
+		float curYpos = this.transform.position.y;
+		if (curYpos + 1 >= roofHeight)
+			return true;
+		if (curYpos - 1 <= groundHeight)
+			return true;
+		return false; //otherwise
 	}
 }

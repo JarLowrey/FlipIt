@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class TheDude : MonoBehaviour {
-
+public class Level2 : MonoBehaviour {
+	
 	Animator animateTheDude;
 	bool characterRotating;
 	float rotationRate = 2f;
@@ -37,8 +37,8 @@ public class TheDude : MonoBehaviour {
 		if( Input.GetKeyDown(KeyCode.Alpha3) ){
 			animateTheDude.SetTrigger ("wave");
 		}
-
-
+		
+		
 		//Gravity controller
 		if( !characterRotating && Input.GetKeyDown(KeyCode.G) ) //cannot rotate while in air, only near planes
 		{
@@ -47,12 +47,12 @@ public class TheDude : MonoBehaviour {
 			Physics.gravity *= -1;
 			currentlyFlipped = !currentlyFlipped; //flip this variable
 		}
-
+		
 		rotate ();
-
+		
 		if (checkForFallout ())
 			respawn ();
-
+		
 		//if character is touching ground then isFlipping = false;
 	}
 	
@@ -79,7 +79,7 @@ public class TheDude : MonoBehaviour {
 		}
 
 	}*/
-
+	
 	private void rotate(){
 		if (characterRotating) {
 			transform.Rotate(0,0,rotationRate);
@@ -101,7 +101,7 @@ public class TheDude : MonoBehaviour {
 			}
 		}
 	}
-
+	
 	//helper funciton to check and see if player is closeEnough to a plane (roof or floor)
 	//in future iterations, this can include moving platforms and other areas that will be acceptable for rotation
 	//true if close enough, false o.w
@@ -113,25 +113,25 @@ public class TheDude : MonoBehaviour {
 			return true;
 		return false; //otherwise
 	}
-
-	//check if fall through roof (or through ground to be added later)
+	
 	private bool checkForFallout()
 	{
 		float curYpos = this.transform.position.y;
 		if (curYpos > roofHeight + 5)
 			return true;
 		return false;
-
+		
 	}
-
 
 	private void respawn()
 	{
+		//reset everything
+		if(currentlyFlipped)
+			Physics.gravity*=-1; //flip
+		currentlyFlipped = !currentlyFlipped; //reset flip bool
 
-		GameObject respawnPoint = GameObject.Find ("Respawn Point");
-		Vector3 respawnPos = respawnPoint.transform.position;
-		this.transform.position = respawnPos;
-		Debug.Log (respawnPos);
+		Application.LoadLevel (Application.loadedLevelName); //reload level
 	}
-
+	
+	
 }

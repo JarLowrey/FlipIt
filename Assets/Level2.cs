@@ -11,6 +11,9 @@ public class Level2 : MonoBehaviour {
 	bool currentlyFlipped = false; //based on original oritenation flipped is flipped from beginning
 	bool isPaused;
 	Rect pauseMenu;
+	AudioSource boxSource;
+	GameObject box;
+	GameObject theGuy;
 
 	
 	// Use this for initialization
@@ -23,6 +26,10 @@ public class Level2 : MonoBehaviour {
 		//pauseCanvas.SetActive (false);
 		isPaused = false;
 		pauseMenu = new Rect (0, 0, Screen.width, Screen.height);
+		box = GameObject.Find ("CubeBlockingDoor");
+		boxSource = box.GetComponent<AudioSource> ();
+		theGuy = GameObject.Find ("Dude");
+
 	}
 	
 	// Update is called once per frame
@@ -68,6 +75,7 @@ public class Level2 : MonoBehaviour {
 			respawn ();
 		
 		//if character is touching ground then isFlipping = false;
+		//audioHandler (); //handle audio if needed
 	}
 	
 	//need a function to smoothly rotate character. Should probably change speed of rotation depending on distance from walls.
@@ -149,7 +157,7 @@ public class Level2 : MonoBehaviour {
 
 	//enter this if game is to be paused now
 	//seprated to allow for seprate music etc.
-	public void pause()
+	private void pause()
 	{
 			//needs to be paused
 			Time.timeScale = 0;
@@ -157,15 +165,15 @@ public class Level2 : MonoBehaviour {
 	}
 
 	//enter this if game is to be unPaused via hitting escape
-	public void unPause()
+	private void unPause()
 	{
 			//just unpause
 			Time.timeScale = 1;
-			//pauseCanvas.SetActive (false);
 	}
 
-	public void mainMenu()
+	public void newLoad(string name)
 	{
+		//these things happen regardless of what you are loading
 		Time.timeScale = 1; //re allow game back in
 		isPaused = false; //not paused
 		//pauseCanvas.SetActive (false);
@@ -173,7 +181,7 @@ public class Level2 : MonoBehaviour {
 			Physics.gravity *= - 1;
 			currentlyFlipped = false;
 		}
-		Application.LoadLevel ("Startup");
+		Application.LoadLevel (name);
 	}
 
 	public void OnGUI(){
@@ -181,22 +189,52 @@ public class Level2 : MonoBehaviour {
 			GUI.Box (pauseMenu, "GAME PAUSED");
 			
 			// Make the Quit button.
-			if (GUI.Button (new Rect (590, 165, 80, 35), "Quit")) {
-				Application.Quit();
-			}
-			
-			if (GUI.Button (new Rect (590, 200, 80, 35), "Resume")) {
+			//params: LEFT TOP WIDTH HEIGHT
+			if (GUI.Button (new Rect (Screen.width/2-50, Screen.height/2-100, 100, 50), "Resume")) {
 				isPaused = false; //flips
 				Time.timeScale = 1;
 				//GetComponent (MouseLook).enabled = true; //resumes game, as isPaused is false
 			}
-			if (GUI.Button (new Rect (590, 235, 80, 35), "Main Menu"))
+			if (GUI.Button (new Rect (Screen.width/2-50, Screen.height/2-50, 100, 50), "Main Menu"))
 			{
-				mainMenu ();
+				newLoad ("Startup");
+			}
+			if (GUI.Button (new Rect (Screen.width/2-50, Screen.height/2, 100, 50), "Retry"))
+			{
+				newLoad (Application.loadedLevelName);
+			}
+			if (GUI.Button (new Rect (Screen.width/2-50, Screen.height/2+50, 100, 50), "Quit")) {
+				Application.Quit(); //IN EDITOR, THERE IS NO FUNCTION OF THIS
 			}
 		}
 	}
 
+	/*private bool boxIsMovingOnPlane()
+	{
+		//only returns true if box is moving on a plan i.e. only in x direction
+		if (Mathf.Abs (box.rigidbody.velocity.x) > 0 && Mathf.Abs (box.rigidbody.velocity.y) == 0 && Mathf.Abs (box.rigidbody.velocity.z) > 0)
+			return true;
+		return false;
+	}*/
 
-	
+	//automatically does collision for the dude (bc attached to this script)
+	//these funcitons are not called
+	public void OnCollisionEnter(Collision collision){
+		//collision and you are actually moving it
+		if (collision.gameObject.name == "CubeBlockingDoor" && Mathf.Abs (box.rigidbody.velocity.x) > 0) {
+			if (!boxSource.isPlaying)
+				boxSource.Play(); //continuous playing as long as loop is checked in box audio source componenet
+
+		}
+	}
+
+	public void OnCollisionExit(Collision collision)
+	{
+		//collision exit of cube block door
+		if (collision.gameObject.name == "CubeBlockingDoor") {
+				boxSource.Stop (); //stop collision noise
+		}
+
+	}
+
 }

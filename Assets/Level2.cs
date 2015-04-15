@@ -9,8 +9,8 @@ public class Level2 : MonoBehaviour {
 	float roofHeight;
 	float groundHeight;
 	bool currentlyFlipped = false; //based on original oritenation flipped is flipped from beginning
-	GameObject pauseCanvas;
 	bool isPaused;
+	Rect pauseMenu;
 
 	
 	// Use this for initialization
@@ -19,9 +19,10 @@ public class Level2 : MonoBehaviour {
 		characterRotating = false;
 		roofHeight = GameObject.Find ("Roof").transform.position.y; //roof height
 		groundHeight = 0; 
-		pauseCanvas = GameObject.Find ("PauseCanvas");
-		pauseCanvas.SetActive (false);
+		//pauseCanvas = GameObject.Find ("PauseCanvas");
+		//pauseCanvas.SetActive (false);
 		isPaused = false;
+		pauseMenu = new Rect (0, 0, Screen.width, Screen.height);
 	}
 	
 	// Update is called once per frame
@@ -152,9 +153,7 @@ public class Level2 : MonoBehaviour {
 	{
 			//needs to be paused
 			Time.timeScale = 0;
-			//pauseCanvas.SetActive (true);
-			OnGUI (); //takes care of GUI window that shows up
-			//gets checked every frame, so as long as it is paused this GUI menu gets polled!
+			//gets checked every frame, so as long as it is paused this GUI menu gets polled WIHTOUT explicilty calling ONGUI
 	}
 
 	//enter this if game is to be unPaused via hitting escape
@@ -162,7 +161,7 @@ public class Level2 : MonoBehaviour {
 	{
 			//just unpause
 			Time.timeScale = 1;
-			pauseCanvas.SetActive (false);
+			//pauseCanvas.SetActive (false);
 	}
 
 	public void mainMenu()
@@ -170,12 +169,16 @@ public class Level2 : MonoBehaviour {
 		Time.timeScale = 1; //re allow game back in
 		isPaused = false; //not paused
 		//pauseCanvas.SetActive (false);
+		if (currentlyFlipped) {
+			Physics.gravity *= - 1;
+			currentlyFlipped = false;
+		}
 		Application.LoadLevel ("Startup");
 	}
 
 	public void OnGUI(){
 		if (isPaused) {
-			GUI.Box (new Rect (580, 20, 100, 210), "GAME PAUSED");
+			GUI.Box (pauseMenu, "GAME PAUSED");
 			
 			// Make the Quit button.
 			if (GUI.Button (new Rect (590, 165, 80, 35), "Quit")) {

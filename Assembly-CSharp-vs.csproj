@@ -49,6 +49,7 @@
      <Compile Include="Assets\Audio.cs" />
      <Compile Include="Assets\Level2.cs" />
      <Compile Include="Assets\LoadOnClick.cs" />
+     <Compile Include="Assets\PauseMenu.cs" />
      <Compile Include="Assets\TheDude.cs" />
      <None Include="Assets\Standard Assets\Skyboxes\_skybox info.txt" />
  <Reference Include="UnityEngine.UI">

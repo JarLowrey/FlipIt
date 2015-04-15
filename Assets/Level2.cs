@@ -9,6 +9,9 @@ public class Level2 : MonoBehaviour {
 	float roofHeight;
 	float groundHeight;
 	bool currentlyFlipped = false; //based on original oritenation flipped is flipped from beginning
+	GameObject pauseCanvas;
+	bool isPaused;
+
 	
 	// Use this for initialization
 	void Start () {
@@ -16,6 +19,9 @@ public class Level2 : MonoBehaviour {
 		characterRotating = false;
 		roofHeight = GameObject.Find ("Roof").transform.position.y; //roof height
 		groundHeight = 0; 
+		pauseCanvas = GameObject.Find ("PauseCanvas");
+		pauseCanvas.SetActive (false);
+		isPaused = false;
 	}
 	
 	// Update is called once per frame
@@ -36,6 +42,13 @@ public class Level2 : MonoBehaviour {
 		}
 		if( Input.GetKeyDown(KeyCode.Alpha3) ){
 			animateTheDude.SetTrigger ("wave");
+		}
+		if (Input.GetKeyDown (KeyCode.Escape)) {
+			isPaused = !isPaused; //flip now, first hit makes this true, is it now paused? is what this does
+			if(isPaused)
+				pause (); //run pause
+			else
+				unPause(); //handles multiple cases and inuts
 		}
 		
 		
@@ -132,6 +145,55 @@ public class Level2 : MonoBehaviour {
 
 		Application.LoadLevel (Application.loadedLevelName); //reload level
 	}
-	
+
+	//enter this if game is to be paused now
+	//seprated to allow for seprate music etc.
+	public void pause()
+	{
+			//needs to be paused
+			Time.timeScale = 0;
+			//pauseCanvas.SetActive (true);
+			OnGUI (); //takes care of GUI window that shows up
+			//gets checked every frame, so as long as it is paused this GUI menu gets polled!
+	}
+
+	//enter this if game is to be unPaused via hitting escape
+	public void unPause()
+	{
+			//just unpause
+			Time.timeScale = 1;
+			pauseCanvas.SetActive (false);
+	}
+
+	public void mainMenu()
+	{
+		Time.timeScale = 1; //re allow game back in
+		isPaused = false; //not paused
+		//pauseCanvas.SetActive (false);
+		Application.LoadLevel ("Startup");
+	}
+
+	public void OnGUI(){
+		if (isPaused) {
+			GUI.Box (new Rect (580, 20, 100, 210), "GAME PAUSED");
+			
+			// Make the Quit button.
+			if (GUI.Button (new Rect (590, 165, 80, 35), "Quit")) {
+				Application.Quit();
+			}
+			
+			if (GUI.Button (new Rect (590, 200, 80, 35), "Resume")) {
+				isPaused = false; //flips
+				Time.timeScale = 1;
+				//GetComponent (MouseLook).enabled = true; //resumes game, as isPaused is false
+			}
+			if (GUI.Button (new Rect (590, 235, 80, 35), "Main Menu"))
+			{
+				mainMenu ();
+			}
+		}
+	}
+
+
 	
 }

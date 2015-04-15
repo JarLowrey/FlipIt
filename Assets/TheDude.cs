@@ -14,6 +14,7 @@ public class TheDude : MonoBehaviour {
 	AudioSource boxSource;
 	GameObject box;
 	GameObject theGuy;
+	string nextLevel = "level_2"; //the next level for loading
 	
 	
 	// Use this for initialization
@@ -228,6 +229,7 @@ public class TheDude : MonoBehaviour {
 				boxSource.Play(); //continuous playing as long as loop is checked in box audio source componenet
 			
 		}
+
 	}
 	
 	public void OnCollisionExit(Collision collision)
@@ -236,7 +238,19 @@ public class TheDude : MonoBehaviour {
 		if (collision.gameObject.name == "CubeBlockingDoor") {
 			boxSource.Stop (); //stop collision noise
 		}
+		if (collision.gameObject.name == "Door") {
+			goToNextLevel (nextLevel);
+			//play winning sound?
+		}
 		
+	}
+
+	private void goToNextLevel(string name){
+		if (currentlyFlipped) {
+			Physics.gravity *= - 1;
+			currentlyFlipped = false;
+		}
+		Application.LoadLevel (name);
 	}
 
 }

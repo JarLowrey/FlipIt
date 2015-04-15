@@ -147,6 +147,10 @@ public class Level2 : MonoBehaviour {
 
 	private void respawn()
 	{
+
+		/*GameObject bcknd = GameObject.Find ("Main Camera");
+		AudioSource audio = bcknd.GetComponent<AudioSource> ();
+		DontDestroyOnLoad (audio);*/
 		//reset everything
 		if(currentlyFlipped)
 			Physics.gravity*=-1; //flip

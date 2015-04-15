@@ -51,6 +51,7 @@
      <Compile Include="Assets\LoadOnClick.cs" />
      <Compile Include="Assets\PauseMenu.cs" />
      <Compile Include="Assets\TheDude.cs" />
+     <None Include="Assets\Audio\Packs\Zero Gravity\Zero Gravity_ReadMe.txt" />
      <None Include="Assets\Standard Assets\Skyboxes\_skybox info.txt" />
  <Reference Include="UnityEngine.UI">
  <HintPath>E:/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/4.6.1/UnityEngine.UI.dll</HintPath>

@@ -63,13 +63,18 @@ public class Level2 : MonoBehaviour {
 		//Gravity controller
 		if( !characterRotating && Input.GetKeyDown(KeyCode.G) ) //cannot rotate while in air, only near planes
 		{
+			animateTheDude.enabled = false; //turn off the animator during rotation
+			animateTheDude.SetFloat("Direction",0); //stop rotation of guy because we are flipping, rotation is sensitive to the current rotation
 			//set speed of rotation based on how far away wall is (if possible)
 			characterRotating = true;
 			Physics.gravity *= -1;
 			currentlyFlipped = !currentlyFlipped; //flip this variable
 		}
 		
-		rotate ();
+		rotate(); //BUGS are coming from the rotation being slightly off (like 0.00000000000000000000003 degrees off)
+		
+		renableAnimator (); //checks to see if animator can be reintroduced (based on if the character is rotation or not)
+		
 		
 		if (checkForFallout ())
 			respawn ();
@@ -122,6 +127,14 @@ public class Level2 : MonoBehaviour {
 				characterRotating = false;
 			}
 		}
+	}
+
+	//this function checks to see if the character is rotating and if it is not, the animator can be reintroduced
+	private void renableAnimator()
+	{
+		if (!characterRotating)
+			animateTheDude.enabled = true;
+		
 	}
 	
 	//helper funciton to check and see if player is closeEnough to a plane (roof or floor)

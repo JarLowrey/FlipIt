@@ -38,18 +38,18 @@ public class TheDude : MonoBehaviour {
 		//Animation controllers
 		float vertical = Input.GetAxis ("Vertical");
 		float horizontal = Input.GetAxis ("Horizontal");
-		animateTheDude.SetFloat("speed", vertical );
+		animateTheDude.SetFloat ("speed", vertical);
 		animateTheDude.SetFloat ("Direction", horizontal, 0.25f, Time.deltaTime);
-		if( Input.GetKeyDown(KeyCode.Space) ){
+		if (Input.GetKeyDown (KeyCode.Space)) {
 			animateTheDude.SetTrigger ("jump");
 		}
-		if( Input.GetKeyDown(KeyCode.Alpha1) ){
+		if (Input.GetKeyDown (KeyCode.Alpha1)) {
 			animateTheDude.SetTrigger ("die");
 		}
-		if( Input.GetKeyDown(KeyCode.Alpha2) ){
+		if (Input.GetKeyDown (KeyCode.Alpha2)) {
 			animateTheDude.SetTrigger ("revive");
 		}
-		if( Input.GetKeyDown(KeyCode.Alpha3) ){
+		if (Input.GetKeyDown (KeyCode.Alpha3)) {
 			animateTheDude.SetTrigger ("wave");
 		}
 		if (Input.GetKeyDown (KeyCode.Escape)) {
@@ -65,16 +65,22 @@ public class TheDude : MonoBehaviour {
 		//Gravity controller
 		if( !characterRotating && Input.GetKeyDown(KeyCode.G) ) //cannot rotate while in air, only near planes
 		{
+			animateTheDude.enabled = false; //turn off the animator during rotation
+			animateTheDude.SetFloat("Direction",0); //stop rotation of guy because we are flipping, rotation is sensitive to the current rotation
 			//set speed of rotation based on how far away wall is (if possible)
 			characterRotating = true;
 			Physics.gravity *= -1;
 			currentlyFlipped = !currentlyFlipped; //flip this variable
 		}
 
-		rotate ();
+		rotate(); //BUGS are coming from the rotation being slightly off (like 0.00000000000000000000003 degrees off)
+
+		renableAnimator (); //checks to see if animator can be reintroduced (based on if the character is rotation or not)
+
 
 		if (checkForFallout ())
 			respawn ();
+
 
 		//if character is touching ground then isFlipping = false;
 	}
@@ -105,23 +111,54 @@ public class TheDude : MonoBehaviour {
 
 	private void rotate(){
 		if (characterRotating) {
-			transform.Rotate(0,0,rotationRate);
+			transform.Rotate (0, 0, rotationRate);
 			
 			Vector3 rot = this.transform.rotation.eulerAngles; 
 			//check if character is done rotating
-			if(Mathf.Abs(rot.z) < Mathf.Abs(rotationRate)){//rightside up
+			if (Mathf.Abs (rot.z) < Mathf.Abs (rotationRate)) {//rightside up
 				//smooth rotation
-				rot = new Vector3(rot.x,rot.y,0);
-				this.transform.rotation = Quaternion.Euler(rot);
+				rot = new Vector3 (rot.x, rot.y, 0);
+				this.transform.rotation = Quaternion.Euler (rot);
 				//signal rotation has ended
 				characterRotating = false;
-			}else if( Mathf.Abs(rot.z-180) < Mathf.Abs(rotationRate) ){//upside down
+			} else if (Mathf.Abs (rot.z - 180) < Mathf.Abs (rotationRate)) {//upside down
 				//smooth rotation
-				rot = new Vector3(rot.x,rot.y,180);
-				this.transform.rotation = Quaternion.Euler(rot);
+				rot = new Vector3 (rot.x, rot.y, 180);
+				this.transform.rotation = Quaternion.Euler (rot);
 				//signal rotation has ended
 				characterRotating = false;
 			}
+
+			/*Quaternion wantedRotation = transform.rotation;
+			wantedRotation.eulerAngles = new Vector3(0,0,180);
+			if(Mathf.Abs (this.transform.rotation.z) < 180){
+			transform.rotation = Quaternion.Lerp(transform.rotation, wantedRotation, Time.deltaTime);
+				Debug.Log("here");
+			}
+			else
+				characterRotating = false;*/
+		}
+	}
+
+	//this function checks to see if the character is rotating and if it is not, the animator can be reintroduced
+	private void renableAnimator()
+	{
+		if (!characterRotating)
+			animateTheDude.enabled = true;
+
+	}
+
+	private void fixRotation()
+	{
+		Vector3 cur = this.transform.rotation.eulerAngles;
+		if (currentlyFlipped) {
+			//rotation should be 180
+			//this.transform.rotation.z = 180;
+		}
+		else
+		{
+			//not flipped
+			this.transform.Rotate(new Vector3(cur.x,cur.y,0));
 		}
 	}
 

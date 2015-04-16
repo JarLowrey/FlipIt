@@ -14,6 +14,7 @@ public class Level2 : MonoBehaviour {
 	AudioSource boxSource;
 	GameObject box;
 	GameObject theGuy;
+	string nextLevel = "Startup"; //for now, bc there is no level 3
 
 	
 	// Use this for initialization
@@ -251,7 +252,19 @@ public class Level2 : MonoBehaviour {
 		if (collision.gameObject.name == "CubeBlockingDoor") {
 				boxSource.Stop (); //stop collision noise
 		}
+		if (collision.gameObject.name == "Door") {
+			goToNextLevel (nextLevel);
+			//play winning sound?
+		}
 
+	}
+
+	private void goToNextLevel(string name){
+		if (currentlyFlipped) {
+			Physics.gravity *= - 1;
+			currentlyFlipped = false;
+		}
+		Application.LoadLevel (name);
 	}
 
 }

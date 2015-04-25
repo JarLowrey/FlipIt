@@ -5,7 +5,7 @@ public class GravityHandler : MonoBehaviour {
 
 	Animator animateTheDude;
 	bool characterRotating;
-	float rotationRate = 2f;
+	float rotationRate =12f;
 	public bool currentlyFlipped = false; //based on original oritenation flipped is flipped from beginning
 	GameObject midpoint;
 
@@ -75,31 +75,23 @@ public class GravityHandler : MonoBehaviour {
 	private void rotate(){
 		if (characterRotating) {
 			transform.Rotate (0, 0, rotationRate);
+			float threshold = 5f;
 			
 			Vector3 rot = this.transform.rotation.eulerAngles; 
 			//check if character is done rotating
-			if (Mathf.Abs (rot.z) < Mathf.Abs (rotationRate)) {//rightside up
+			if (Mathf.Abs (rot.z) < threshold || Mathf.Abs(rot.z-360) < threshold) {//rightside up
 				//smooth rotation
 				rot = new Vector3 (rot.x, rot.y, 0);
 				this.transform.rotation = Quaternion.Euler (rot);
 				//signal rotation has ended
 				characterRotating = false;
-			} else if (Mathf.Abs (rot.z - 180) < Mathf.Abs (rotationRate)) {//upside down
+			} else if (Mathf.Abs (rot.z - 180) < threshold) {//upside down
 				//smooth rotation
 				rot = new Vector3 (rot.x, rot.y, 180);
 				this.transform.rotation = Quaternion.Euler (rot);
 				//signal rotation has ended
 				characterRotating = false;
 			}
-			
-			/*Quaternion wantedRotation = transform.rotation;
-			wantedRotation.eulerAngles = new Vector3(0,0,180);
-			if(Mathf.Abs (this.transform.rotation.z) < 180){
-			transform.rotation = Quaternion.Lerp(transform.rotation, wantedRotation, Time.deltaTime);
-				Debug.Log("here");
-			}
-			else
-				characterRotating = false;*/
 		}
 	}
 	

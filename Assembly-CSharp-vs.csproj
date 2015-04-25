@@ -51,10 +51,15 @@
      <Compile Include="Assets\GravityHandler.cs" />
      <Compile Include="Assets\LoadOnClick.cs" />
      <Compile Include="Assets\MainLevelHandler.cs" />
+     <Compile Include="Assets\ParticleHandler.cs" />
      <Compile Include="Assets\PauseMenu.cs" />
      <Compile Include="Assets\PlatformMovement.cs" />
+     <None Include="Assets\Standard Assets\Particles\Sources\Shaders\Particle Alpha Blend (Queue +100).shader" />
      <None Include="Assets\Audio\Packs\Zero Gravity\Zero Gravity_ReadMe.txt" />
      <None Include="Assets\Standard Assets\Skyboxes\_skybox info.txt" />
+ <Reference Include="Assembly-UnityScript-firstpass">
+ <HintPath>C:/Users/James/Documents/Git/Final Unity Project/Library/ScriptAssemblies/Assembly-UnityScript-firstpass.dll</HintPath>
+ </Reference>
  <Reference Include="UnityEngine.UI">
  <HintPath>C:/Program Files (x86)/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/4.6.3/UnityEngine.UI.dll</HintPath>
  </Reference>

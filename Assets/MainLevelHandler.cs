@@ -45,7 +45,38 @@ public class MainLevelHandler : MonoBehaviour {
 		//Animation controllers
 		float vertical = Input.GetAxis ("Vertical");
 		float horizontal = Input.GetAxis ("Horizontal");
-		animateTheDude.SetFloat ("speed", vertical);
+		animateTheDude.SetFloat("runningSpeedMagnitude", Mathf.Abs(vertical) );
+
+
+		if(vertical<0 ){
+			animateTheDude.speed = -1;
+		}else{
+			animateTheDude.speed = 1;
+		}
+
+
+		Debug.Log (animateTheDude.GetFloat("runningSpeedMagnitude"));
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+		//animateTheDude.SetFloat ("speed", vertical);
 		animateTheDude.SetFloat ("Direction", horizontal, 0.25f, Time.deltaTime);
 		if (Input.GetKeyDown (KeyCode.Space)) {
 			animateTheDude.SetTrigger ("jump");

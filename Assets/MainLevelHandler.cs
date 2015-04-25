@@ -51,6 +51,7 @@ public class MainLevelHandler : MonoBehaviour {
 		if (Input.GetKeyDown (KeyCode.Space)) {
 			animateTheDude.SetTrigger ("jump");
 		}
+		/*
 		if (Input.GetKeyDown (KeyCode.Alpha1)) {
 			animateTheDude.SetTrigger ("die");
 		}
@@ -60,6 +61,7 @@ public class MainLevelHandler : MonoBehaviour {
 		if (Input.GetKeyDown (KeyCode.Alpha3)) {
 			animateTheDude.SetTrigger ("wave");
 		}
+		*/
 		if (Input.GetKeyDown (KeyCode.Escape)) {
 			isPaused = !isPaused; //flip now, first hit makes this true, is it now paused? is what this does
 			if(isPaused)

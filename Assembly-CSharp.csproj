@@ -52,6 +52,7 @@
      <Compile Include="Assets\LoadOnClick.cs" />
      <Compile Include="Assets\MainLevelHandler.cs" />
      <Compile Include="Assets\PauseMenu.cs" />
+     <Compile Include="Assets\PlatformMovement.cs" />
      <None Include="Assets\Audio\Packs\Zero Gravity\Zero Gravity_ReadMe.txt" />
      <None Include="Assets\Standard Assets\Skyboxes\_skybox info.txt" />
  <Reference Include="UnityEngine.UI">

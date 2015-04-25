@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 
 //commented out code is working on a solution to the camera moving through walls
+//		solution relies on collider on camera
 
 public class CameraMovement : MonoBehaviour {
 	public float rotateSpeed;

@@ -4,13 +4,13 @@
 //		solution relies on collider on camera
 
 public class CameraMovement : MonoBehaviour {
-	public float rotateSpeed;
+	float rotateSpeed;
 	//public float zoomSpeed;
 	//private bool cameraZoomIn, cameraZoomOut;
 	//private float originalDistanceFromCharacter;
 
 	void Start(){
-		rotateSpeed *= Time.deltaTime;
+		rotateSpeed =  80* Time.deltaTime;
 		//zoomSpeed *= Time.deltaTime;
 
 		//originalDistanceFromCharacter = (transform.position - transform.parent.position).magnitude;
@@ -18,13 +18,13 @@ public class CameraMovement : MonoBehaviour {
 
 	void Update() {	
 		HandleCameraLookAround ();
-		/*
-		if (cameraZoomIn) {
+
+		/*if (cameraZoomIn) {
 			ZoomCameraIn();
 		} else if (cameraZoomOut) {
 			ZoomCameraOut();
-		}
-		*/
+		}*/
+
 	}
 
 	//move the camera around by modifying the rotation/position of its parent, an empty object inside of player character
@@ -35,8 +35,8 @@ public class CameraMovement : MonoBehaviour {
 		float movementY = Input.GetAxis ("Mouse Y");
 		transform.parent.Rotate (Vector3.left, rotateSpeed * movementY);
 	}
-	/*
-	void OnCollisionEnter(){
+
+	/*void OnCollisionEnter(){
 		cameraZoomIn = true;
 		cameraZoomOut = false;
 	}
@@ -65,5 +65,15 @@ public class CameraMovement : MonoBehaviour {
 			cameraZoomIn=false;
 		}
 	}
-	*/
+
+
+	private void wallCollision(Vector3 fromObject, ref Vector3 toTarget)
+	{
+
+		RaycastHit hit;
+		if(Physics.Linecast(fromObject,toTarget, out hit))
+		   {
+			toTarget = new Vector3(hit.point.x, toTarget.y, hit.point.z);
+		}
+		}*/
 }

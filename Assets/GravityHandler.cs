@@ -135,10 +135,15 @@ public class GravityHandler : MonoBehaviour {
 		if (curYpos - 1 <= groundHeight)
 			return true;
 		return false; //otherwise*/
-		
+
+		GameObject helper = GameObject.Find("CameraRotationHelper");
 		Vector3 dwn = transform.TransformDirection(Vector3.up);
-		if (Physics.Raycast (transform.position, dwn, 1))
-			return true;
-		return false;
+		float distanceToGround = 0.0f;
+		RaycastHit hit;
+		if (Physics.Raycast(transform.position, -Vector3.up, out hit, 100.0F))
+			distanceToGround = hit.distance;
+
+		Debug.Log (distanceToGround);
+		return true;
 	}
 }

@@ -92,7 +92,7 @@ public class GravityHandler : MonoBehaviour {
 			distance = hit.distance;
 		}
 		else{
-			Physics.Raycast (midpoint.transform.position, -Vector3.up, out hit,distance);
+			Physics.Raycast (midpoint.transform.position, Vector3.down, out hit,distance);
 			distance = hit.distance;
 			
 		}

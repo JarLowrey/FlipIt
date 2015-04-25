@@ -11,20 +11,9 @@ public class GravityHandler : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-
 		animateTheDude = GetComponent<Animator> ();
 		characterRotating = false;
-		midpoint = GameObject.Find ("MidpointBody");
-		//roofHeight = GameObject.Find ("Roof").transform.position.y; //roof height
-		//groundHeight = 0; 
-		//pauseCanvas = GameObject.Find ("PauseCanvas");
-		//pauseCanvas.SetActive (false);
-		//isPaused = false;
-		//pauseMenu = new Rect (0, 0, Screen.width, Screen.height);
-		//box = GameObject.Find ("CubeBlockingDoor");
-		//boxSource = box.GetComponent<AudioSource> ();
-		//theGuy = GameObject.Find ("Dude");
-	
+		midpoint = GameObject.Find ("MidpointBody");	
 	}
 	
 	// Update is called once per frame
@@ -47,30 +36,6 @@ public class GravityHandler : MonoBehaviour {
 		renableAnimator (); //checks to see if animator can be reintroduced (based on if the character is rotation or not)
 
 	}
-
-	//need a function to smoothly rotate character. Should probably change speed of rotation depending on distance from walls.
-	//Must ensure that character has flipped by the time he touches next wall
-	//this might be useful http://codereview.stackexchange.com/questions/68217/rotating-a-character-upside-down-and-vice-versa
-	private void rotateCharacter(){ 
-		//var distance = Vector3.Distance(object1.transform.position, object2.transform.position);//calc distance between 2 objects
-		Vector3 rot = this.transform.rotation.eulerAngles; 
-		rot = new Vector3(rot.x,rot.y,rot.z+180);
-		this.transform.rotation = Quaternion.Euler(rot);
-	}
-	/*
-	private void rotate(){
-		float totalRotation = 0;
-		while (characterRotating) {
-			if(totalRotation >= 180){
-				characterRotating = false;
-			}else{
-				Vector3 rot = this.transform.rotation.eulerAngles;
-				transform.Rotate(0, 0, rotationRate * Time.deltaTime);
-				totalRotation += rotationRate * Time.deltaTime;
-			}
-		}
-
-	}*/
 	
 	private void rotate(){
 		if (characterRotating) {
@@ -105,10 +70,6 @@ public class GravityHandler : MonoBehaviour {
 
 	public void respawn()
 	{
-		
-		/*GameObject bcknd = GameObject.Find ("Main Camera");
-		AudioSource audio = bcknd.GetComponent<AudioSource> ();
-		DontDestroyOnLoad (audio);*/
 		//reset everything
 		if(currentlyFlipped)
 			Physics.gravity*=-1; //flip

@@ -1,11 +1,10 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\MainLevelHandler.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\CameraMovement.cs">
     <Files>
-      <File FileName="Assets\GravityHandler.cs" Line="89" Column="5" />
-      <File FileName="Assets\Level2.cs" Line="22" Column="31" />
-      <File FileName="Assets\MainLevelHandler.cs" Line="181" Column="52" />
-      <File FileName="Assets\TheDude.cs" Line="10" Column="1" />
+      <File FileName="Assets\GravityHandler.cs" Line="27" Column="2" />
+      <File FileName="Assets\MainLevelHandler.cs" Line="14" Column="24" />
+      <File FileName="Assets\CameraMovement.cs" Line="11" Column="52" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

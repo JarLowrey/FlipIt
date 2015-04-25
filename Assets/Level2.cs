@@ -4,23 +4,21 @@ using System.Collections;
 public class Level2 : MonoBehaviour {
 	
 	Animator animateTheDude;
-	bool characterRotating;
-	float rotationRate = 2f;
 	float roofHeight;
 	float groundHeight;
-	bool currentlyFlipped = false; //based on original oritenation flipped is flipped from beginning
+	public bool currentlyFlipped; //based on original oritenation flipped is flipped from beginning, found in GravityHandler
 	bool isPaused;
 	Rect pauseMenu;
 	AudioSource boxSource;
 	GameObject box;
 	GameObject theGuy;
 	string nextLevel = "Startup"; //for now, bc there is no level 3
-
+	GravityHandler gravScript;
 	
 	// Use this for initialization
 	void Start () {
+		gravScript = GetComponent<GravityHandler> ();
 		animateTheDude = GetComponent<Animator> ();
-		characterRotating = false;
 		roofHeight = GameObject.Find ("Roof").transform.position.y; //roof height
 		groundHeight = 0; 
 		//pauseCanvas = GameObject.Find ("PauseCanvas");
@@ -35,6 +33,9 @@ public class Level2 : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+
+		currentlyFlipped = gravScript.currentlyFlipped; //grab the currently flipped variable from the gravity handler
+
 		//Animation controllers
 		float vertical = Input.GetAxis ("Vertical");
 		float horizontal = Input.GetAxis ("Horizontal");
@@ -59,83 +60,12 @@ public class Level2 : MonoBehaviour {
 			else
 				unPause(); //handles multiple cases and inuts
 		}
-		
-		
-		//Gravity controller
-		if( !characterRotating && Input.GetKeyDown(KeyCode.G) ) //cannot rotate while in air, only near planes
-		{
-			animateTheDude.enabled = false; //turn off the animator during rotation
-			animateTheDude.SetFloat("Direction",0); //stop rotation of guy because we are flipping, rotation is sensitive to the current rotation
-			//set speed of rotation based on how far away wall is (if possible)
-			characterRotating = true;
-			Physics.gravity *= -1;
-			currentlyFlipped = !currentlyFlipped; //flip this variable
-		}
-		
-		rotate(); //BUGS are coming from the rotation being slightly off (like 0.00000000000000000000003 degrees off)
-		
-		renableAnimator (); //checks to see if animator can be reintroduced (based on if the character is rotation or not)
-		
-		
+
 		if (checkForFallout ())
-			respawn ();
+			gravScript.respawn ();
 		
 		//if character is touching ground then isFlipping = false;
 		//audioHandler (); //handle audio if needed
-	}
-	
-	//need a function to smoothly rotate character. Should probably change speed of rotation depending on distance from walls.
-	//Must ensure that character has flipped by the time he touches next wall
-	//this might be useful http://codereview.stackexchange.com/questions/68217/rotating-a-character-upside-down-and-vice-versa
-	private void rotateCharacter(){ 
-		//var distance = Vector3.Distance(object1.transform.position, object2.transform.position);//calc distance between 2 objects
-		Vector3 rot = this.transform.rotation.eulerAngles; 
-		rot = new Vector3(rot.x,rot.y,rot.z+180);
-		this.transform.rotation = Quaternion.Euler(rot);
-	}
-	/*
-	private void rotate(){
-		float totalRotation = 0;
-		while (characterRotating) {
-			if(totalRotation >= 180){
-				characterRotating = false;
-			}else{
-				Vector3 rot = this.transform.rotation.eulerAngles;
-				transform.Rotate(0, 0, rotationRate * Time.deltaTime);
-				totalRotation += rotationRate * Time.deltaTime;
-			}
-		}
-
-	}*/
-	
-	private void rotate(){
-		if (characterRotating) {
-			transform.Rotate(0,0,rotationRate);
-			
-			Vector3 rot = this.transform.rotation.eulerAngles; 
-			//check if character is done rotating
-			if(Mathf.Abs(rot.z) < Mathf.Abs(rotationRate)){//rightside up
-				//smooth rotation
-				rot = new Vector3(rot.x,rot.y,0);
-				this.transform.rotation = Quaternion.Euler(rot);
-				//signal rotation has ended
-				characterRotating = false;
-			}else if( Mathf.Abs(rot.z-180) < Mathf.Abs(rotationRate) ){//upside down
-				//smooth rotation
-				rot = new Vector3(rot.x,rot.y,180);
-				this.transform.rotation = Quaternion.Euler(rot);
-				//signal rotation has ended
-				characterRotating = false;
-			}
-		}
-	}
-
-	//this function checks to see if the character is rotating and if it is not, the animator can be reintroduced
-	private void renableAnimator()
-	{
-		if (!characterRotating)
-			animateTheDude.enabled = true;
-		
 	}
 	
 	//helper funciton to check and see if player is closeEnough to a plane (roof or floor)
@@ -159,19 +89,7 @@ public class Level2 : MonoBehaviour {
 		
 	}
 
-	private void respawn()
-	{
 
-		/*GameObject bcknd = GameObject.Find ("Main Camera");
-		AudioSource audio = bcknd.GetComponent<AudioSource> ();
-		DontDestroyOnLoad (audio);*/
-		//reset everything
-		if(currentlyFlipped)
-			Physics.gravity*=-1; //flip
-		currentlyFlipped = !currentlyFlipped; //reset flip bool
-
-		Application.LoadLevel (Application.loadedLevelName); //reload level
-	}
 
 	//enter this if game is to be paused now
 	//seprated to allow for seprate music etc.
@@ -242,7 +160,10 @@ public class Level2 : MonoBehaviour {
 		if (collision.gameObject.name == "CubeBlockingDoor" && Mathf.Abs (box.rigidbody.velocity.x) > 0) {
 			if (!boxSource.isPlaying)
 				boxSource.Play(); //continuous playing as long as loop is checked in box audio source componenet
-
+		}
+		if (collision.gameObject.name == "Door") {
+			goToNextLevel (nextLevel);
+			//play winning sound?
 		}
 	}
 
@@ -252,10 +173,7 @@ public class Level2 : MonoBehaviour {
 		if (collision.gameObject.name == "CubeBlockingDoor") {
 				boxSource.Stop (); //stop collision noise
 		}
-		if (collision.gameObject.name == "Door") {
-			goToNextLevel (nextLevel);
-			//play winning sound?
-		}
+
 
 	}
 

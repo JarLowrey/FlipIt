@@ -47,8 +47,11 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\Audio.cs" />
+     <Compile Include="Assets\GravityHandler.cs" />
+     <Compile Include="Assets\GuiHandler.cs" />
      <Compile Include="Assets\Level2.cs" />
      <Compile Include="Assets\LoadOnClick.cs" />
+     <Compile Include="Assets\MainLevelHandler.cs" />
      <Compile Include="Assets\PauseMenu.cs" />
      <Compile Include="Assets\TheDude.cs" />
      <None Include="Assets\Audio\Packs\Zero Gravity\Zero Gravity_ReadMe.txt" />

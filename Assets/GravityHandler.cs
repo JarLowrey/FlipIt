@@ -7,12 +7,14 @@ public class GravityHandler : MonoBehaviour {
 	bool characterRotating;
 	float rotationRate = 2f;
 	public bool currentlyFlipped = false; //based on original oritenation flipped is flipped from beginning
+	GameObject midpoint;
 
 	// Use this for initialization
 	void Start () {
 
 		animateTheDude = GetComponent<Animator> ();
 		characterRotating = false;
+		midpoint = GameObject.Find ("MidpointBody");
 		//roofHeight = GameObject.Find ("Roof").transform.position.y; //roof height
 		//groundHeight = 0; 
 		//pauseCanvas = GameObject.Find ("PauseCanvas");
@@ -27,9 +29,10 @@ public class GravityHandler : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		bool onPlane = isOnPlane (); //could be up or down
 
 		//Gravity controller
-		if( !characterRotating && Input.GetKeyDown(KeyCode.G) && isOnPlane() ) //cannot rotate while in air, only near planes
+		if( !characterRotating && Input.GetKeyDown(KeyCode.G) && onPlane) //cannot rotate while in air, only near planes
 		{
 			animateTheDude.enabled = false; //turn off the animator during rotation
 			animateTheDude.SetFloat("Direction",0); //stop rotation of guy because we are flipping, rotation is sensitive to the current rotation
@@ -42,9 +45,6 @@ public class GravityHandler : MonoBehaviour {
 		rotate(); //BUGS are coming from the rotation being slightly off (like 0.00000000000000000000003 degrees off)
 		
 		renableAnimator (); //checks to see if animator can be reintroduced (based on if the character is rotation or not)
-
-		Debug.Log (isOnPlane());
-		Debug.Log (transform.position.y);
 
 	}
 
@@ -129,21 +129,24 @@ public class GravityHandler : MonoBehaviour {
 	//in future iterations, this can include moving platforms and other areas that will be acceptable for rotation
 	//true if close enough, false o.w
 	private bool isOnPlane(){
-		/*float curYpos = this.transform.position.y;
-		if (curYpos + 1 >= roofHeight)
-			return true;
-		if (curYpos - 1 <= groundHeight)
-			return true;
-		return false; //otherwise*/
-
-		GameObject helper = GameObject.Find("CameraRotationHelper");
-		Vector3 dwn = transform.TransformDirection(Vector3.up);
-		float distanceToGround = 0.0f;
+		float distance = 1f;
 		RaycastHit hit;
-		if (Physics.Raycast(transform.position, -Vector3.up, out hit, 100.0F))
-			distanceToGround = hit.distance;
 
-		Debug.Log (distanceToGround);
-		return true;
+		if(currentlyFlipped){
+			//params are origin, direction of ray, "to hit" distance of ray (baiscalyl how far you want it to check)
+			Physics.Raycast (midpoint.transform.position, Vector3.up, out hit,distance);
+			//go until it hits something within 1
+			distance = hit.distance;
+		}
+		else{
+			Physics.Raycast (midpoint.transform.position, -Vector3.up, out hit,distance);
+			distance = hit.distance;
+			
+		}
+
+		if (distance != 0) //if u hit anyhting thne it isn't 0 and you are "on a plane"
+			return true;
+		return false;
+
 	}
 }

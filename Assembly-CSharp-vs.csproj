@@ -47,9 +47,11 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\Audio.cs" />
+     <Compile Include="Assets\BoxHandler.cs" />
      <Compile Include="Assets\CameraMovement.cs" />
      <Compile Include="Assets\GravityHandler.cs" />
      <Compile Include="Assets\LoadOnClick.cs" />
+     <Compile Include="Assets\MainCharacterStats.cs" />
      <Compile Include="Assets\MainLevelHandler.cs" />
      <Compile Include="Assets\ParticleHandler.cs" />
      <Compile Include="Assets\PauseMenu.cs" />

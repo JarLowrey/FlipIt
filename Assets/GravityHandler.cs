@@ -81,7 +81,7 @@ public class GravityHandler : MonoBehaviour {
 	//helper funciton to check and see if player is closeEnough to a plane (roof or floor)
 	//in future iterations, this can include moving platforms and other areas that will be acceptable for rotation
 	//true if close enough, false o.w
-	private bool isOnPlane(){
+	public bool isOnPlane(){
 		float distance = 1f;
 		RaycastHit hit;
 

@@ -38,43 +38,13 @@ public class MainLevelHandler : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-	
 		//grab variables from grav handler
 		currentlyFlipped = gravScript.currentlyFlipped; //grab the currently flipped variable from the gravity handler
 
 		//Animation controllers
 		float vertical = Input.GetAxis ("Vertical");
 		float horizontal = Input.GetAxis ("Horizontal");
-		animateTheDude.SetFloat("runningSpeedMagnitude", Mathf.Abs(vertical) );
-
-
-		if(vertical<0 ){
-			animateTheDude.speed = -1;
-		}else{
-			animateTheDude.speed = 1;
-		}
-
-
-		Debug.Log (animateTheDude.GetFloat("runningSpeedMagnitude"));
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+		animateTheDude.SetFloat("runningSpeed", vertical );
 
 		//animateTheDude.SetFloat ("speed", vertical);
 		animateTheDude.SetFloat ("Direction", horizontal, 0.25f, Time.deltaTime);

@@ -6,8 +6,7 @@ public class MainLevelHandler : MonoBehaviour {
 	Animator animateTheDude;
 	//bool characterRotating;
 	//float rotationRate = 2f;
-	float roofHeight;
-	float groundHeight;
+	public float roofHeight,groundHeight;
 	private  bool isPaused,isDead,currentlyFlipped;//based on original oritenation flipped is flipped from beginning, found in GravityHandler
 	Rect pauseMenu;
 	//AudioSource boxSource;
@@ -24,8 +23,6 @@ public class MainLevelHandler : MonoBehaviour {
 		allObjsNotDude = GameObject.FindGameObjectsWithTag("notDude"); 
 		gravScript = GetComponent<GravityHandler> ();
 		animateTheDude = GetComponent<Animator> ();
-		roofHeight = GameObject.Find ("Roof").transform.position.y; //roof height
-		groundHeight = 0;
 		isPaused = false;
 		isDead = false;
 		pauseMenu = new Rect (0, 0, Screen.width, Screen.height);
@@ -99,7 +96,7 @@ public class MainLevelHandler : MonoBehaviour {
 	private bool checkForFallout(GameObject obj)
 	{
 		float curYpos = obj.transform.position.y;
-		if (curYpos > roofHeight + 5)
+		if (curYpos > roofHeight + 5 || curYpos<groundHeight - 5)
 			return true;
 		return false;
 		

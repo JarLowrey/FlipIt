@@ -2,9 +2,10 @@
 using System.Collections;
 
 public class MovePlatform : MonoBehaviour {
-	private float currentDistanceMoved;
-	private bool movePlayerWithPlatform;
-	public float distanceUntilChangeDirection, speed;
+	private float currentDistanceMoved, elapsedDelay;
+	private float numberOfMovementCycles = 0;
+	private bool movePlayerWithThisPlatform, delayFinished, waitForDelay;
+	public float distanceUntilChangeDirection, speed,SecondsOfDelayBetweenMovementCycle;
 	public Vector3 direction;
 	
 	// Use this for initialization
@@ -20,28 +21,47 @@ public class MovePlatform : MonoBehaviour {
 		}
 		
 		direction.Normalize ();//ensure that direction does not impact the speed
-		speed *= Time.deltaTime;//make speed dependent on time instead of framerate
-		direction *= speed;
-		movePlayerWithPlatform = false;
+		movePlayerWithThisPlatform = false;
+		waitForDelay = true; //need to set to true for delay to apply on the first movement cycle
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		movePlatform ();
+		MovePlatformAndCheckForDelay ();
 
 		//move main player along with the moving platform
-		if (movePlayerWithPlatform) {
-			GameObject.Find("Dude").transform.position +=(direction);
+		if (movePlayerWithThisPlatform) {
+			GameObject.Find("Dude").transform.position += getMovementDirection ();
+		}
+	}
+
+	private void MovePlatformAndCheckForDelay(){
+		if (waitForDelay) {
+			elapsedDelay += Time.deltaTime;
+			if(elapsedDelay > SecondsOfDelayBetweenMovementCycle){
+				waitForDelay = false;
+				elapsedDelay = 0;
+				movePlatform();
+			}
+		} else {
+			movePlatform ();
 		}
 	}
 
 	private void movePlatform(){
+		Vector3 movement  = getMovementDirection ();
+
 		if (currentDistanceMoved < distanceUntilChangeDirection) {
-			transform.position += direction;
-			currentDistanceMoved += direction.magnitude;
+			transform.position += movement;
+			currentDistanceMoved += movement.magnitude;
 		} else {
 			currentDistanceMoved = 0;
 			direction *= -1;
+
+			numberOfMovementCycles++;//increment every time platform changes direction (ie reached end of its leash)
+			if(numberOfMovementCycles % 2 ==0){//platform has gone there and back
+				waitForDelay = true;
+			}
 		}
 	}
 	
@@ -53,12 +73,18 @@ public class MovePlatform : MonoBehaviour {
 		}
 	}
 
+	private Vector3 getMovementDirection(){
+		//delta time changes every frame, and thus must be recalculated every frame
+		float speed_in_time = speed * Time.deltaTime;//make speed dependent on time instead of framerate
+		return direction * speed_in_time;
+	}
+
 	//trigger methods used in the box collider that is a trigger.
 	//These methods to move player with the platform
 	void OnTriggerEnter ( Collider other) {
-		movePlayerWithPlatform = true;
+		movePlayerWithThisPlatform = true;
 	}
 	void OnTriggerExit(Collider other){
-		movePlayerWithPlatform = false;
+		movePlayerWithThisPlatform = false;
 	}
 }

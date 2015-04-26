@@ -204,11 +204,11 @@ public class MainLevelHandler : MonoBehaviour {
 
 	
 
-	private void goToNextLevel(string name){/*
+	private void goToNextLevel(string name){
 		if (currentlyFlipped) {
 			Physics.gravity *= - 1;
 			currentlyFlipped = false;
-		}*/
+		}
 		Application.LoadLevel (name);
 	}
 	

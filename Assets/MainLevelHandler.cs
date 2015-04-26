@@ -8,9 +8,7 @@ public class MainLevelHandler : MonoBehaviour {
 	//float rotationRate = 2f;
 	float roofHeight;
 	float groundHeight;
-	public bool currentlyFlipped; //based on original oritenation flipped is flipped from beginning, found in GravityHandler
-	public bool isPaused;
-	public bool isDead;
+	private  bool isPaused,isDead,currentlyFlipped;//based on original oritenation flipped is flipped from beginning, found in GravityHandler
 	Rect pauseMenu;
 	//AudioSource boxSource;
 	//GameObject box;

@@ -82,7 +82,7 @@ public class GravityHandler : MonoBehaviour {
 	//in future iterations, this can include moving platforms and other areas that will be acceptable for rotation
 	//true if close enough, false o.w
 	public bool isOnPlane(){
-		float distance = 1f;
+		float distance = 1.5f;
 		RaycastHit hit;
 
 		if(currentlyFlipped){

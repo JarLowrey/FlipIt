@@ -45,7 +45,7 @@ public class MainCharacterStats : MonoBehaviour {
 		float velocityRequiredToKill = 3f;
 		bool onPlane = gravScript.isOnPlane ();
 		
-		bool crush = Physics.Raycast (beingCrushed.transform.position, Vector3.up, out hit,3); //true if the beingCrushed looks up and is being hit, 3 is hardcoded for now
+		bool crush = Physics.Raycast (beingCrushed.transform.position, Vector3.up, out hit,4); //true if the beingCrushed looks up and is being hit, 3 is hardcoded for now
 		Debug.Log (onPlane);
 		Debug.Log (crusher.rigidbody.velocity.y);
 		//options, play with mass, make a ratio of mass/velocity? extension ideas

@@ -178,7 +178,7 @@ public class MainLevelHandler : MonoBehaviour {
 		}
 
 		//for winning only
-		if (won) {
+		if (won && !isPaused && !isDead) {
 			Time.timeScale = 0; //stop time
 				string message = "You WON in " + timeToWin + " seconds";
 				GUI.Box (pauseMenu, message);

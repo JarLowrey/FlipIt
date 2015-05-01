@@ -74,9 +74,13 @@ public class MovePlatform : MonoBehaviour {
 	}
 
 	private Vector3 getMovementDirection(){
-		//delta time changes every frame, and thus must be recalculated every frame
-		float speed_in_time = speed * Time.deltaTime;//make speed dependent on time instead of framerate
-		return direction * speed_in_time;
+		if (waitForDelay) {
+			return new Vector3(0,0,0);
+		} else {
+			//delta time changes every frame, and thus must be recalculated every frame
+			float speed_in_time = speed * Time.deltaTime;//make speed dependent on time instead of framerate
+			return direction * speed_in_time;
+		}
 	}
 
 	//trigger methods used in the box collider that is a trigger.

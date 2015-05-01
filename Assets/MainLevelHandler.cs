@@ -60,7 +60,7 @@ public class MainLevelHandler : MonoBehaviour {
 			animateTheDude.SetTrigger ("wave");
 		}
 		*/
-		if (Input.GetKeyDown (KeyCode.Escape)) {
+		if (Input.GetKeyDown (KeyCode.Escape) && !won) {
 			isPaused = !isPaused; //flip now, first hit makes this true, is it now paused? is what this does
 			if(isPaused)
 				pause (); //run pause
@@ -149,7 +149,7 @@ public class MainLevelHandler : MonoBehaviour {
 	
 	
 	public void OnGUI(){
-		if (isPaused || isDead) {
+		if ((isPaused || isDead) && !won) {
 			if(isDead)
 				GUI.Box (pauseMenu, "You Died!");
 			else if(isPaused)

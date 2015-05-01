@@ -14,7 +14,7 @@ public class BoxHandler : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-	
+
 	}
 
 	//automatically does collision for the dude (bc attached to this script)

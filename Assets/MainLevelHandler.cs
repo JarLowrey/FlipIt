@@ -6,8 +6,9 @@ public class MainLevelHandler : MonoBehaviour {
 	Animator animateTheDude;
 	//bool characterRotating;
 	//float rotationRate = 2f;
-	public float roofHeight,groundHeight;
+	public float roofHeight,groundHeight,timeToWin;
 	private  bool isPaused,isDead,currentlyFlipped;//based on original oritenation flipped is flipped from beginning, found in GravityHandler
+	public bool won;
 	Rect pauseMenu;
 	//AudioSource boxSource;
 	//GameObject box;
@@ -29,6 +30,8 @@ public class MainLevelHandler : MonoBehaviour {
 		//box = GameObject.Find ("CubeBlockingDoor");
 		//boxSource = box.GetComponent<AudioSource> ();
 		theGuy = GameObject.Find ("Dude");
+		won = false;
+		Time.timeScale = 1; //always reset time
 	}
 	
 	// Update is called once per frame
@@ -65,7 +68,7 @@ public class MainLevelHandler : MonoBehaviour {
 				unPause(); //handles multiple cases and inuts
 		}
 		
-		if (checkForFallout (this.gameObject))
+		if (checkForFallout (this.gameObject) && !isDead && !won)
 			gravScript.respawn ();
 	else {
 			foreach (GameObject notDude in allObjsNotDude)
@@ -74,6 +77,8 @@ public class MainLevelHandler : MonoBehaviour {
 		}
 		
 		//if character is touching ground then isFlipping = false;
+
+
 	}
 	
 	private void fixRotation()
@@ -171,6 +176,32 @@ public class MainLevelHandler : MonoBehaviour {
 				Application.Quit(); //IN EDITOR, THERE IS NO FUNCTION OF THIS
 			}
 		}
+
+		//for winning only
+		if (won) {
+			Time.timeScale = 0; //stop time
+				string message = "You WON in " + timeToWin + " seconds";
+				GUI.Box (pauseMenu, message);
+
+				if (GUI.Button (new Rect (Screen.width/2-50, Screen.height/2-100, 100, 50), "Next")) {
+					isPaused = false; //flips
+					Time.timeScale = 1;
+					goToNextLevel (nextLevel);
+					//GetComponent (MouseLook).enabled = true; //resumes game, as isPaused is false
+				}
+
+			if (GUI.Button (new Rect (Screen.width/2-50, Screen.height/2-50, 100, 50), "Main Menu"))
+			{
+				newLoad ("Startup");
+			}
+			if (GUI.Button (new Rect (Screen.width/2-50, Screen.height/2, 100, 50), "Retry"))
+			{
+				newLoad (Application.loadedLevelName);
+			}
+			if (GUI.Button (new Rect (Screen.width/2-50, Screen.height/2+50, 100, 50), "Quit")) {
+				Application.Quit(); //IN EDITOR, THERE IS NO FUNCTION OF THIS
+			}
+		}
 	}
 
 	public void ShowDeathGui(){
@@ -190,9 +221,12 @@ public class MainLevelHandler : MonoBehaviour {
 		//collision and you are actually moving it
 		//all box collision goes here
 		if (collision.gameObject.tag == "Goal") {
-			goToNextLevel (nextLevel);
+			//goToNextLevel (nextLevel);
+			won = true;
+			timeToWin = Time.timeSinceLevelLoad;
 			//play winning sound?
 		}
+
 	}
 	
 	public void OnCollisionExit(Collision collision)

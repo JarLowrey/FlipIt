@@ -10,14 +10,14 @@ public class CameraMovement : MonoBehaviour {
 	//private float originalDistanceFromCharacter;
 
 	void Start(){
-		rotateSpeed =  80* Time.deltaTime;
-		//zoomSpeed *= Time.deltaTime;
+		rotateSpeed = 80;
+		//zoomSpeed *= 1;
 
 		//originalDistanceFromCharacter = (transform.position - transform.parent.position).magnitude;
 	}
 
 	void Update() {	
-		HandleCameraLookAround ();
+		HandleCameraLookAround (rotateSpeed * Time.deltaTime);
 
 		/*if (cameraZoomIn) {
 			ZoomCameraIn();
@@ -28,12 +28,12 @@ public class CameraMovement : MonoBehaviour {
 	}
 
 	//move the camera around by modifying the rotation/position of its parent, an empty object inside of player character
-	void HandleCameraLookAround(){
+	void HandleCameraLookAround(float speed){
 		float movementX = Input.GetAxis ("Mouse X");
-		transform.parent.RotateAround (transform.parent.transform.parent.position, Vector3.down, rotateSpeed * movementX);
+		transform.parent.RotateAround (transform.parent.transform.parent.position, Vector3.down, speed * movementX);
 		
 		float movementY = Input.GetAxis ("Mouse Y");
-		transform.parent.Rotate (Vector3.left, rotateSpeed * movementY);
+		transform.parent.Rotate (Vector3.left, speed * movementY);
 	}
 
 	/*void OnCollisionEnter(){
